@@ -10,8 +10,9 @@ function apiCallExample() {
 
 function fillTable(data) {
     for (let row of data) {
-        if (row.season == "Spring" && row.year == 2022) {
-            var mapNumber = parseInt(row.map);
+        console.log(row)
+        if (row.track.season == "Spring" && row.track.year == 2022) {
+            var mapNumber = parseInt(row.track.map);
             var playerNumber;
 
             switch (row.player) {
@@ -30,8 +31,8 @@ function fillTable(data) {
             if (playerNumber !== -1) {
                 var cell = tableBody.querySelector(`tr:nth-of-type(${mapNumber})`).querySelector(`td:nth-of-type(${playerNumber})`);
 
-                milliSec = row.time.slice(-3);
-                secTemp = parseInt(row.time.slice(0, -3));
+                milliSec = row.time.toString().slice(-3);
+                secTemp = parseInt(row.time.toString().slice(0, -3));
                 min = Math.floor(secTemp / 60);
                 sec = secTemp - min * 60;
 

@@ -15,13 +15,19 @@
         <img class="logo" src="images/tm_logo.png">
     </nav>
 
-    <button onclick="apiCallExample()">Server sample</button>
-
     <div class="drag-area">
-        <header>Drag & Drop to Upload File</header>
-        <span>OR</span>
-        <button>Browse File</button>
-        <input type="file">
+        <div class="area-empty">
+            <header>Drag & Drop to Upload File</header>
+            <span>OR</span>
+            <button>Browse File</button>
+            <input type="file">
+        </div>
+
+        <div class="area-filled">
+            <header>0 file(s) ready to upload</header>
+            <button>Upload</button>
+        </div>
+
     </div>
 
     <table class="main-table">
