@@ -10,10 +10,12 @@ button.onclick = () => {
     input.click();
 }
 
-input.addEventListener("change", function () {
+input.addEventListener("change", function (event) {
     file = this.files[0];
     dropArea.classList.add("active");
-    showFile();
+    dropArea.classList.remove("active");
+    dragText.textContent = "Drag & Drop to Upload File";
+    handleFile();
 });
 
 dropArea.addEventListener("dragover", (event) => {
@@ -30,47 +32,34 @@ dropArea.addEventListener("dragleave", () => {
 dropArea.addEventListener("drop", (event) => {
     event.preventDefault();
     file = event.dataTransfer.files[0];
-    showFile();
+    dropArea.classList.remove("active");
+    dragText.textContent = "Drag & Drop to Upload File";
+    handleFile();
 });
 
-function showFile() {
+function handleFile() {
     let fileType = file.name.split(".").pop();
     let validExtensions = ["Gbx"];
-    console.log("1")
+
     if (validExtensions.includes(fileType)) {
         const reader = new FileReader();
-        const fileByteArray = [];
+        reader.readAsArrayBuffer(file);
+        reader.onloadend = (event) => {
+            if (event.target.readyState === FileReader.DONE) {
+                const arrayBuffer = event.target.result;
+                const array = new Uint8Array(arrayBuffer);
 
-        input.addEventListener('change', (event) => {
-            reader.readAsArrayBuffer(event.target.files[0]);
-            reader.onloadend = (event) => {
-                if (event.target.readyState === FileReader.DONE) {
-                    const arrayBuffer = event.target.result;
-                    const array = new Uint8Array(arrayBuffer);
-
-                    for (const a of array) {
-                        fileByteArray.push(a);
+                let mGBX = new GBX({
+                    data: array,
+                    onParse: function (metadata) {
+                        console.log(metadata)
                     }
-
-                    let mGBX = new GBX({
-                        data: array,
-                        onParse: function (metadata) {
-                            console.log(metadata)
-                        }
-                    })
-                }
+                })
             }
-        })
+        }
     } else {
         alert("This is not a GBX File!");
         dropArea.classList.remove("active");
         dragText.textContent = "Drag & Drop to Upload File";
     }
-}
-
-function apiCallExample() {
-    fetch('http://localhost:3000/records')
-        .then(response => response.json())
-        .then(data => console.log(data))
-        .catch(err => console.log(err));
 }
