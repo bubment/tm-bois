@@ -1,0 +1,23 @@
+table,
+th,
+td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 0.5em;
+
+}
+
+.main-table {
+    width: 70%;
+    margin: 0 auto;
+    text-align: center
+}
+
+
+.header-track {
+    width: 10%;
+}
+
+.header-player {
+    width: 30%;
+}

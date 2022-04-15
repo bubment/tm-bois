@@ -1,0 +1,45 @@
+.drag-area {
+    margin: 2em auto;
+    box-sizing: border-box;
+    border: 2px dashed var(--navigation-background);
+    height: 200px;
+    width: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.drag-area input {
+    visibility: hidden;
+    height: 0;
+}
+
+.drag-area.active {
+    border: 2px solid var(--navigation-background);
+}
+
+.drag-area header {
+    font-size: 2em;
+    font-weight: 500;
+    color: var(--navigation-background);
+}
+
+.drag-area span {
+    font-size: 1em;
+    font-weight: 500;
+    color: var(--navigation-background);
+    margin: 0.5em 0;
+}
+
+.drag-area button {
+    padding: 0.4em 1em;
+    font-size: 1.5em;
+    font-weight: 500;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    background: var(--navigation-background);
+    color: #ffffff;
+    cursor: pointer;
+}
