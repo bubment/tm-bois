@@ -1,7 +1,7 @@
 
 const tableBody = document.querySelector("tbody");
 
-function apiCallExample() {
+function initBody() {
     fetch(`${HOST}/records`)
         .then(response => response.json())
         .then(data => fillTable(data))
