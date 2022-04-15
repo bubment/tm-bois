@@ -2,15 +2,15 @@ const dropArea = document.querySelector(".drag-area");
 const textAreaEmpty = document.querySelector(".area-empty");
 const textAreaFilled = document.querySelector(".area-filled");
 const filledText = textAreaFilled.querySelector("header");
-const dragText = dropArea.querySelector("header");
+const emptyText = textAreaEmpty.querySelector("header");
 const browseButton = textAreaEmpty.querySelector("button");
 const uploadButton = textAreaFilled.querySelector("button");
 const input = dropArea.querySelector("input");
 
-var GBXArray = [];
-var dragCounter = 0;
+let fileList = [];
+let parsedFileList = [];
 
-function transformFiles(fileList) {
+function transformFiles() {
     for (file of fileList) {
         const reader = new FileReader();
         reader.readAsArrayBuffer(file);
@@ -23,7 +23,7 @@ function transformFiles(fileList) {
                     data: array,
                     onParse: function (metadata) {
                         if (metadata.type == "Replay") {
-                            GBXArray.push(metadata);
+                            parsedFileList.push(metadata);
                         }
                     }
                 })
@@ -32,24 +32,35 @@ function transformFiles(fileList) {
     }
 }
 
-function acceptFiles(fileList) {
-    var isValidExtension = true;
+function verifyFiles() {
+    console.log(fileList);
+
     for (file of fileList) {
         let fileType = file.name.split(".").pop();
         let validExtensions = ["Gbx"];
         if (!validExtensions.includes(fileType)) {
-            alert("Only GBX files are allowed!");
-            isValidExtension = false;
+            let index = fileList.indexOf(file);
+            fileList.splice(index, 1);
         }
     }
 
-    if (isValidExtension) {
-        transformFiles(fileList);
-        filledText.textContent = `${fileList.length} file ready to upload`;
+    transformFiles();
+    updateView();
+}
+
+function updateView() {
+    dropArea.classList.remove("active");
+    if (fileList.length > 0) {
+        if (fileList.length > 1) {
+            filledText.textContent = `${fileList.length} files are ready to upload`;
+        } else {
+            filledText.textContent = `${fileList.length} file is ready to upload`;
+        }
         textAreaEmpty.style.display = "none";
         textAreaFilled.style.display = "flex";
     } else {
-        dragText.textContent = "Drag & Drop to Upload File";
+        textAreaEmpty.style.display = "flex";
+        textAreaFilled.style.display = "none";
     }
 }
 
@@ -59,19 +70,20 @@ browseButton.addEventListener("click", () => {
 
 uploadButton.addEventListener("click", () => {
 
-    const requestBody = GBXArray.map(replay => {
+    const requestBody = parsedFileList.map(replay => {
         return {
-            driverNickname:replay.driverNickname,
-            time:replay.time,
-            xml:replay.xml
+            driverNickname: replay.driverNickname,
+            time: replay.time,
+            xml: replay.xml
         }
-    })
+    });
 
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestBody)
     };
+
     fetch(`${HOST}/replays`, requestOptions)
         .then(response => response.json())
         .then(data => {
@@ -80,37 +92,37 @@ uploadButton.addEventListener("click", () => {
         })
         .catch(error => console.log(error));
 
-    GBXArray = [];
+    fileList = [];
+    parsedFileList = [];
     textAreaEmpty.style.display = "flex";
     textAreaFilled.style.display = "none";
 });
 
-input.addEventListener("change", () => {
-    var fileList = this.files;
-    dropArea.classList.remove("active");
-    acceptFiles(fileList);
+input.addEventListener("change", function () {
+    let droppedFiles = this.files;
+    for (let i = 0; i < droppedFiles.length; i++) {
+        fileList.push(droppedFiles[i]);
+    }
+    verifyFiles();
 });
 
 dropArea.addEventListener("dragover", (event) => {
     event.preventDefault();
     dropArea.classList.add("active");
-    textAreaEmpty.style.display = "flex";
-    textAreaFilled.style.display = "none";
-    dragText.textContent = "Release to Upload File";
 });
 
-
-dropArea.addEventListener("dragleave", (e) => {
-    if (e.relatedTarget.className != "drag-ignore" && e.target.className != "drag-ignore") {
-        dropArea.classList.remove("active");
-        dragText.textContent = "Drag & Drop to Upload File";
+dropArea.addEventListener("dragleave", (event) => {
+    if (event.relatedTarget.className != "drag-ignore" && event.target.className != "drag-ignore") {
+        updateView();
     }
 });
 
 dropArea.addEventListener("drop", (event) => {
     event.preventDefault();
-    var fileList = event.dataTransfer.files;
-    dropArea.classList.remove("active");
-    acceptFiles(fileList);
+    let droppedFiles = event.dataTransfer.files;
+    for (let i = 0; i < droppedFiles.length; i++) {
+        fileList.push(droppedFiles[i]);
+    }
+    verifyFiles();
 });
 

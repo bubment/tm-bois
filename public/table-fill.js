@@ -1,16 +1,15 @@
 
 const tableBody = document.querySelector("tbody");
 
-function initBody() {
+window.addEventListener("load", () => {
     fetch(`${HOST}/records`)
         .then(response => response.json())
         .then(data => fillTable(data))
         .catch(err => console.log(err));
-}
+});
 
 function fillTable(data) {
     for (let row of data) {
-        console.log(row)
         if (row.track.season == "Spring" && row.track.year == 2022) {
             var mapNumber = parseInt(row.track.map);
             var playerNumber;

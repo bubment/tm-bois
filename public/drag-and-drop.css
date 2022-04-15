@@ -1,6 +1,7 @@
 .drag-area {
     margin: 2em auto;
     box-sizing: border-box;
+    outline: none;
     border: 2px dashed var(--navigation-background);
     height: 100px;
     width: 400px;

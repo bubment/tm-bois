@@ -9,7 +9,7 @@
     <title>Trackmania</title>
 </head>
 
-<body onload="initBody()">
+<body>
 
     <nav>
         <img class="logo" src="images/tm_logo.png">
@@ -17,14 +17,14 @@
 
     <div class="drag-area">
         <div class="area-empty">
-            <header class="drag-ignore">Drag & Drop to Upload File</header>
+            <header class="drag-ignore">Drop GBX files here</header>
             <span class="drag-ignore">OR</span>
-            <button class="drag-ignore">Browse File</button>
-            <input class="drag-ignore" type="file">
+            <button class="drag-ignore">Browse</button>
+            <input class="drag-ignore" type="file" multiple="multiple">
         </div>
 
         <div class="area-filled">
-            <header>0 file(s) ready to upload</header>
+            <header>0 file is ready to upload</header>
             <button>Upload</button>
         </div>
 

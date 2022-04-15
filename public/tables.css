@@ -1,18 +1,8 @@
-table,
-th,
-td {
-    border: 1px solid black;
-    border-collapse: collapse;
-    padding: 0.5em;
-
-}
-
 .main-table {
     width: 70%;
     margin: 0 auto;
     text-align: center
 }
-
 
 .header-track {
     width: 22%;
@@ -20,4 +10,12 @@ td {
 
 .header-player {
     width: 26%;
+}
+
+table,
+th,
+td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 0.5em;
 }
