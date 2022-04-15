@@ -56,3 +56,7 @@
 .area-filled button {
     margin-top: 1em;
 }
+
+button:hover {
+    background: var(--navigation-background-light);
+}

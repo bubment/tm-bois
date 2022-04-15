@@ -3,6 +3,7 @@
 :root {
     --site-background: #f3f3f3;
     --navigation-background: #0f2172;
+    --navigation-background-light: #2447e6;
 }
 
 * {

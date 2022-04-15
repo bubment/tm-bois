@@ -7,8 +7,8 @@ const browseButton = textAreaEmpty.querySelector("button");
 const uploadButton = textAreaFilled.querySelector("button");
 const input = dropArea.querySelector("input");
 
-
 var GBXArray = [];
+var dragCounter = 0;
 
 function transformFiles(fileList) {
     for (file of fileList) {
@@ -66,6 +66,10 @@ uploadButton.addEventListener("click", () => {
         .then(response => response.json())
         .then(data => console.log(data))
         .catch(error => console.log(error));
+
+    GBXArray = [];
+    textAreaEmpty.style.display = "flex";
+    textAreaFilled.style.display = "none";
 });
 
 input.addEventListener("change", () => {
@@ -75,7 +79,6 @@ input.addEventListener("change", () => {
 });
 
 dropArea.addEventListener("dragover", (event) => {
-    GBXArray = [];
     event.preventDefault();
     dropArea.classList.add("active");
     textAreaEmpty.style.display = "flex";
@@ -83,9 +86,12 @@ dropArea.addEventListener("dragover", (event) => {
     dragText.textContent = "Release to Upload File";
 });
 
-dropArea.addEventListener("dragleave", () => {
-    dropArea.classList.remove("active");
-    dragText.textContent = "Drag & Drop to Upload File";
+
+dropArea.addEventListener("dragleave", (e) => {
+    if (e.relatedTarget.className != "drag-ignore" && e.target.className != "drag-ignore") {
+        dropArea.classList.remove("active");
+        dragText.textContent = "Drag & Drop to Upload File";
+    }
 });
 
 dropArea.addEventListener("drop", (event) => {
