@@ -2,7 +2,7 @@
 const tableBody = document.querySelector("tbody");
 
 function apiCallExample() {
-    fetch('http://localhost:3000/records')
+    fetch(`${HOST}/records`)
         .then(response => response.json())
         .then(data => fillTable(data))
         .catch(err => console.log(err));
