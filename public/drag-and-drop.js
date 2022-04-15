@@ -58,13 +58,26 @@ browseButton.addEventListener("click", () => {
 });
 
 uploadButton.addEventListener("click", () => {
+
+    const requestBody = GBXArray.map(replay => {
+        return {
+            driverNickname:replay.driverNickname,
+            time:replay.time,
+            xml:replay.xml
+        }
+    })
+
     const requestOptions = {
         method: 'POST',
-        body: JSON.stringify(GBXArray)
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestBody)
     };
     fetch(`${HOST}/replays`, requestOptions)
         .then(response => response.json())
-        .then(data => console.log(data))
+        .then(data => {
+            fillTable(data.data)
+            console.log(data)
+        })
         .catch(error => console.log(error));
 
     GBXArray = [];

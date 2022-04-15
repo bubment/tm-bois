@@ -8,8 +8,8 @@ const DB_URL = `mongodb+srv://bubment:ABC123abc@cluster0.ph1px.mongodb.net/${dbN
 const client = new MongoClient(DB_URL);
 const db = client.db(dbName);
 const collection = db.collection('records');
-
 app.use(express.static('public'))
+app.use(express.json());
 app.get('/records', async (req, res) => {
   const recordsList = await collection.find().toArray();
   res.status(200).send(formatRecords(recordsList))
@@ -17,18 +17,7 @@ app.get('/records', async (req, res) => {
 
 app.post('/replays', async (req, res) => {
   //define the real request body
-  const reqBody = [
-    {
-      driverNickname:"bubment",
-      time:74666,
-      xml:"<header type=\"replay\" exever=\"3.3.0\" exebuild=\"2022-04-11_15_55\" title=\"TMStadium\"><map uid=\"nPNAxzaFzu5HURpQa3LugeWC9mm\" name=\"Spring 2022 - 14\" author=\"Nadeo\" authorzone=\"\"/><desc envir=\"Stadium\" mood=\"\" maptype=\"TrackMania\\TM_Race\" mapstyle=\"\" displaycost=\"0\" mod=\"\" /><playermodel id=\"CarSport\"/><times best=\"74888\" respawns=\"-1\" stuntscore=\"0\" validable=\"1\"/><checkpoints cur=\"9\" /></header>"
-    },
-    {
-      driverNickname:"bubment",
-      time:74789,
-      xml:"<header type=\"replay\" exever=\"3.3.0\" exebuild=\"2022-04-11_15_55\" title=\"TMStadium\"><map uid=\"nPNAxzaFzu5HURpQa3LugeWC9mm\" name=\"Spring 2022 - 25\" author=\"Nadeo\" authorzone=\"\"/><desc envir=\"Stadium\" mood=\"\" maptype=\"TrackMania\\TM_Race\" mapstyle=\"\" displaycost=\"0\" mod=\"\" /><playermodel id=\"CarSport\"/><times best=\"74888\" respawns=\"-1\" stuntscore=\"0\" validable=\"1\"/><checkpoints cur=\"9\" /></header>"
-    }
-  ]
+  const reqBody = req.body;
   let response, recordsList;
   try {
     recordsList = await collection.find().toArray();
@@ -95,6 +84,7 @@ app.post('/replays', async (req, res) => {
   response = {success:true, message:"Replay saved successfully", data:formatRecords(recordsList)}
   res.status(200).send(response)
 })
+
 
 app.listen(PORT, async () => {
   await client.connect();
