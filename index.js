@@ -16,56 +16,84 @@ app.get('/records', async (req, res) => {
 })
 
 app.post('/replays', async (req, res) => {
-  const insertResult = await collection.insertMany([
-    {
-      player:'bubment',
-      track:'Spring 2022 - 17',
-      time:31845
-    }
-  ]);
+  //define the real request body
   const reqBody = [
     {
-      authorNickname:"bubment",
-      time:74888,
-      xml:"<header type=\"replay\" exever=\"3.3.0\" exebuild=\"2022-04-11_15_55\" title=\"TMStadium\"><map uid=\"nPNAxzaFzu5HURpQa3LugeWC9mm\" name=\"Spring 2022 - 24\" author=\"Nadeo\" authorzone=\"\"/><desc envir=\"Stadium\" mood=\"\" maptype=\"TrackMania\\TM_Race\" mapstyle=\"\" displaycost=\"0\" mod=\"\" /><playermodel id=\"CarSport\"/><times best=\"74888\" respawns=\"-1\" stuntscore=\"0\" validable=\"1\"/><checkpoints cur=\"9\" /></header>"
+      driverNickname:"bubment",
+      time:74666,
+      xml:"<header type=\"replay\" exever=\"3.3.0\" exebuild=\"2022-04-11_15_55\" title=\"TMStadium\"><map uid=\"nPNAxzaFzu5HURpQa3LugeWC9mm\" name=\"Spring 2022 - 14\" author=\"Nadeo\" authorzone=\"\"/><desc envir=\"Stadium\" mood=\"\" maptype=\"TrackMania\\TM_Race\" mapstyle=\"\" displaycost=\"0\" mod=\"\" /><playermodel id=\"CarSport\"/><times best=\"74888\" respawns=\"-1\" stuntscore=\"0\" validable=\"1\"/><checkpoints cur=\"9\" /></header>"
     },
     {
-      authorNickname:"bubment",
-      time:74889,
+      driverNickname:"bubment",
+      time:74789,
       xml:"<header type=\"replay\" exever=\"3.3.0\" exebuild=\"2022-04-11_15_55\" title=\"TMStadium\"><map uid=\"nPNAxzaFzu5HURpQa3LugeWC9mm\" name=\"Spring 2022 - 25\" author=\"Nadeo\" authorzone=\"\"/><desc envir=\"Stadium\" mood=\"\" maptype=\"TrackMania\\TM_Race\" mapstyle=\"\" displaycost=\"0\" mod=\"\" /><playermodel id=\"CarSport\"/><times best=\"74888\" respawns=\"-1\" stuntscore=\"0\" validable=\"1\"/><checkpoints cur=\"9\" /></header>"
     }
   ]
-  //1. Get all records
-  const recordsList = await collection.find().toArray();
-  //1.1 Parse body
-  const parsedRecords = reqBody.map(rawRecord => {
-    const findingExpression = 'name="'
-    const strStartPos = rawRecord.xml.search(new RegExp(`${findingExpression}`)) + findingExpression.length
-    const strEndPos = rawRecord.xml.indexOf('"',strStartPos)
-    const track = rawRecord.xml.substring(strStartPos,strEndPos)
-    return {
-      player: rawRecord.authorNickname,
-      time:rawRecord.time,
-      track
-    }
-  })
+  let response, recordsList;
+  try {
+    recordsList = await collection.find().toArray();
+  } catch (error) {
+    console.log(error)
+    response = {success:false, message:"An error occurred while fetching the records from db", data:null}
+    return res.status(400).send(response)
+  }
+  
+  let parsedRecords,findingExpression,strStartPos,strEndPos,track;
+  try {
+    parsedRecords = reqBody.map(rawRecord => {
+      findingExpression = 'name="'
+      strStartPos = rawRecord.xml.search(new RegExp(`${findingExpression}`)) + findingExpression.length
+      strEndPos = rawRecord.xml.indexOf('"',strStartPos)
+      track = rawRecord.xml.substring(strStartPos,strEndPos)
+      return {
+        player: rawRecord.driverNickname,
+        time:rawRecord.time,
+        track
+      }
+    })
+  } catch (error) {
+    console.log(error)
+    response = {success:false, message:"Error while parsing records", data:null}
+    return res.status(400).send(response)
+  }
+
   let insertableRecordsArray = [];
   let updatableRecordsArray = [];
-  //2. Create inserable recordsArray
   for (let i = 0; i < parsedRecords.length; i++) {
     const record = parsedRecords[i];
     const matchingRecord = recordsList.find(dbRecord => dbRecord.player == record.player && dbRecord.track == record.track)
     if(!matchingRecord){
-      insertableRecordsArray.push(parsedRecords)
+      insertableRecordsArray.push(record)
+      continue;
+    }
+    if(record.time < matchingRecord.time){
+      updatableRecordsArray.push(record)
+      continue;
     }
   }
-  //3. Create updatable records array
-
-  //4. Insert records
-  //5. Update records
-  //6. Return result to client
-  // const sampleResponse = {success:true, message:"Replay saved successfully"}
-  res.status(200).send(parsedRecords)
+  if (insertableRecordsArray.length) {
+    try {
+      await collection.insertMany(insertableRecordsArray);
+    } catch (error) {
+      console.log(error)
+      response = {success:false, message:"Error while inserting new records", data:null}
+      return res.status(400).send(response)
+    }
+    
+  }
+  for (let i = 0; i < updatableRecordsArray.length; i++) {
+    const updateElement = updatableRecordsArray[i];
+    try {
+      await collection.updateOne({ player: updateElement.player, track:updateElement.track }, { $set: { time: updateElement.time } });
+    } catch (error) {
+      console.log(error)
+      response = {success:false, message:"Error while updating records", data:null}
+      return res.status(400).send(response)
+    }
+  }
+  recordsList = await collection.find().toArray();
+  response = {success:true, message:"Replay saved successfully", data:formatRecords(recordsList)}
+  res.status(200).send(response)
 })
 
 app.listen(PORT, async () => {
