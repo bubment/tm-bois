@@ -51,3 +51,10 @@ function showFile() {
         dragText.textContent = "Drag & Drop to Upload File";
     }
 }
+
+function apiCallExample(){
+    fetch('http://localhost:3000/records')
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(err => console.log(err));
+}
