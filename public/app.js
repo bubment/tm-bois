@@ -34,27 +34,43 @@ dropArea.addEventListener("drop", (event) => {
 });
 
 function showFile() {
-    let fileType = file.type;
-    let validExtensions = ["gbx"];
+    let fileType = file.name.split(".").pop();
+    let validExtensions = ["Gbx"];
+    console.log("1")
     if (validExtensions.includes(fileType)) {
-        let fileReader = new FileReader(); //creating new FileReader object
-        fileReader.onload = () => {
-            let fileURL = fileReader.result; //passing user file source in fileURL variable
-            // UNCOMMENT THIS BELOW LINE. I GOT AN ERROR WHILE UPLOADING THIS POST SO I COMMENTED IT
-            // let imgTag = `<img src="${fileURL}" alt="image">`; //creating an img tag and passing user selected file source inside src attribute
-            dropArea.innerHTML = imgTag; //adding that created img tag inside dropArea container
-        }
-        fileReader.readAsDataURL(file);
+        const reader = new FileReader();
+        const fileByteArray = [];
+
+        input.addEventListener('change', (event) => {
+            reader.readAsArrayBuffer(event.target.files[0]);
+            reader.onloadend = (event) => {
+                if (event.target.readyState === FileReader.DONE) {
+                    const arrayBuffer = event.target.result;
+                    const array = new Uint8Array(arrayBuffer);
+
+                    for (const a of array) {
+                        fileByteArray.push(a);
+                    }
+
+                    let mGBX = new GBX({
+                        data: array,
+                        onParse: function (metadata) {
+                            console.log(metadata)
+                        }
+                    })
+                }
+            }
+        })
     } else {
-        alert("This is not an GBX File!");
+        alert("This is not a GBX File!");
         dropArea.classList.remove("active");
         dragText.textContent = "Drag & Drop to Upload File";
     }
 }
 
-function apiCallExample(){
+function apiCallExample() {
     fetch('http://localhost:3000/records')
-    .then(response => response.json())
-    .then(data => console.log(data))
-    .catch(err => console.log(err));
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .catch(err => console.log(err));
 }
