@@ -1,12 +1,19 @@
 
 const tableBody = document.querySelector("tbody");
 
-window.addEventListener("load", () => {
+function initBody() {
     fetch(`${HOST}/records`)
-        .then(response => response.json())
-        .then(data => fillTable(data))
-        .catch(err => console.log(err));
-});
+    .then(response => response.json())
+    .then(data => fillTable(data))
+    .catch(err => console.log(err));
+}
+
+// window.addEventListener("load", () => {
+//     fetch(`${HOST}/records`)
+//         .then(response => response.json())
+//         .then(data => fillTable(data))
+//         .catch(err => console.log(err));
+// });
 
 function fillTable(data) {
     for (let row of data) {
@@ -38,6 +45,25 @@ function fillTable(data) {
                 cell.innerHTML = `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}.${milliSec}`;
             }
         }
+    }
+    formatTable()
+}
+
+function formatTable(){
+    let fastestCellInfo, currentTime, currentCell;
+     for (var i = 0, row; row = tableBody.rows[i]; i++) {
+        fastestCellInfo = { index:1, time:Infinity}
+        for (var j = 0, col; col = row.cells[j]; j++) {
+            if (!col.innerHTML.includes(':')) {
+                continue;
+            }
+            currentTime = parseFloat(col.innerHTML.replace(':',''))
+            if(currentTime < fastestCellInfo.time){
+              fastestCellInfo = { index:j, time:currentTime}
+            }
+        }
+        currentCell = tableBody.rows[i].cells[fastestCellInfo.index]
+        currentCell.innerHTML = `<span class="best-time">${currentCell.innerHTML}</span>`
     }
 }
 

@@ -19,3 +19,8 @@ td {
     border-collapse: collapse;
     padding: 0.5em;
 }
+
+.best-time{
+    font-weight: bold;
+    color: lightseagreen;
+}
