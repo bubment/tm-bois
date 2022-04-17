@@ -58,6 +58,7 @@
     margin-top: 1em;
 }
 
+/* [TIPP #5] --> Lásd tables.css */
 button:hover {
     background: var(--navigation-background-light);
 }

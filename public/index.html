@@ -3,6 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
+    <!-- [TIPP #1] Ilyen jellegű projekteknél elég egy darab css fájl -->
+    <!-- Azon belül érdemes kommentekkel jelezni, hogy melyik css fromázások melyik fő részhez tartoznak -->
     <link rel="stylesheet" href="navigation.css">
     <link rel="stylesheet" href="drag-and-drop.css">
     <link rel="stylesheet" href="tables.css">
@@ -24,12 +26,17 @@
         </div>
 
         <div class="area-filled">
+            <!-- [TIPP #2] Nem érdemes hard codolni ilyen jellegű szöveges contentet -->
+            <!-- ha véletlen elromlik egy funkció a uer láthatja és az nem egészséges -->
             <header>0 file is ready to upload</header>
             <button>Upload</button>
         </div>
 
     </div>
-
+    <!-- [TIPP #3] Hosszú távon jobb megoldás, hogy egy teljesen üres táblázat van a HTML-ben -->
+    <!-- Sokkal egyszerűbb változtatni a dinamikus feltöltésen, ha az egészet scriptből építed fel -->
+    <!-- Majd lesz egy jó módszer ha eljutsz a frontend keretrendszerekig -->
+    <!-- https://www.youtube.com/watch?v=YrxBCBibVo0&list=PL4cUxeGkcC9hYYGbV60Vq3IXYNfDk8At1&ab_channel=TheNetNinja -->
     <table class="main-table">
         <thead>
             <tr>
@@ -192,7 +199,12 @@
             </tr>
         </tbody>
     </table>
-
+    <!-- [TIPP #4] A meghivatkozott script fájlok rálátnak az egymásban lévő globális változókra/függvényekre-->
+    <!-- Fájlok meghivatkozásának sorrendje: -->
+    <!-- 1. Azok a script fájlok amelyekben lévő változókat használnak más script fájlok (environment.js) -->
+    <!-- 2. Azok a script fájlok, amelyek oldal inicializálódáskor kell, hogy lefussanak (table-fill.js) -->
+    <!-- 3. Többi script fájl -->
+    <!-- (Itt most minden jó, de ez olyan, amit nem érdemes elfelejteni) -->
     <script src="environment.js"></script>
     <script src="drag-and-drop.js"></script>
     <script src="table-fill.js"></script>

@@ -12,6 +12,10 @@
     width: 26%;
 }
 
+/* [TIPP #5]: Általában kerülendőek a nagyon általános selectorok (pl.: table,div,p,stb.) */
+/* Ha a netről lopsz valahonnan megoldást (w3-ra ez különösen igaz) ott mindig érdemes átirogatni ezeket a selectorokat nehogy a */
+/* honlap olyan részeit is beformázza a cucc, amit nem kéne  */
+
 table,
 th,
 td {
