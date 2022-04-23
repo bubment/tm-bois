@@ -1,0 +1,97 @@
+#drop-container {
+    position: absolute;
+    margin: 10em auto;
+    box-sizing: border-box;
+    border-radius: 10px;
+    background: var(--base-color-white-opacity);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 400px;
+    width: 95%;
+}
+
+#drop-area {
+    margin: auto;
+    width: 95%;
+    height: 90%;
+    display: flex;
+    border-radius: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+#drop-area:hover {
+    border: 2px dashed var(--navigation-background);
+}
+
+#instruction-container {
+    background: var(--navigation-background);
+    width: 350px;
+    border-radius: 10px;
+    height: 40%;
+    color: var(--base-color-white);
+}
+
+#area-empty,
+#area-filled {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+#input-empty {
+    display: none;
+}
+
+#header-text-empty,
+#header-text-filled {
+    font-size: 1.5em;
+    font-weight: 500;
+}
+
+#span-empty {
+    font-size: 0.75em;
+    font-weight: 500;
+    margin: 1em 0;
+}
+
+#span-filled {
+    font-size: 0.75em;
+    font-weight: 500;
+    margin: 0.5em 0 1em 0;
+}
+
+.active {
+    border: 2px dashed var(--navigation-background-opacity);
+}
+
+.active #instruction-container {
+    background: var(--navigation-background-opacity);
+}
+
+#area-filled {
+    display: none;
+}
+
+#button-section-filled {
+    display: flex;
+    flex-direction: row;
+}
+
+#button-filled-upload {
+    margin-right: 1em;
+}
+
+@media (min-width: 900px) {
+    #drop-container {
+        height: 400px;
+        width: 800px;
+    }
+
+    #instruction-container {
+        width: 50%;
+    }
+}

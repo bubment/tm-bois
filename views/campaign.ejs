@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <link rel='stylesheet' href='/css/navigation.css'>
+    <link rel='stylesheet' href='/css/record-table.css'>
+    <title>Trackmania</title>
+</head>
+
+<body>
+    <%- include('partials/header') %>
+    <div id="record-container">
+        <% if (response.success == true && response.data[0]) { %>
+        <h1 id="record-title">
+            OFFICIAL LEADERBOARD OF THE <br><%= response.campaign[0] %> <%= response.campaign[1] %> CAMPAIGN
+        </h1>
+        <table id="record-table">
+            <thead id="table-header">
+                <% let headerLenght = response.columns.length %>
+                <tr class="table-header-row">
+                    <% if (headerLenght > 0) { %>
+                    <td class="table-header-data">No.</td>
+                    <% for (let player of response.columns) { %>
+                    <td class="table-header-data">
+                        <%= player %>
+                    </td>
+                    <% } %>
+                    <% } %>
+                </tr>
+            </thead>
+
+            <tbody id="table-body">
+                <% if (headerLenght > 0) { %>
+                <% for (let track in response.data) { %>
+                <tr class="table-body-row">
+                    <td class="table-body-data">
+                        <%= response.data[track].trackName %>
+                    </td>
+                    <% for (let player of response.columns) { %>
+                    <% let cellData = response.data[track].trackRecords.find(record => (record.username == player)) %>
+                    <td class="table-body-data ">
+                        <% if (typeof cellData !== 'undefined') { %>
+                        <div id="time-container">
+                            <div class="time-content"><%= cellData.time %></div>
+                            <div class="delta-content"><%= cellData.delta %></div>
+                        </div>
+                        <% } %>
+                    </td>
+                    <% } %>
+                </tr>
+                <% } %>
+                <% } %>
+            </tbody>
+        </table>
+        <% } else { %>
+        <h1 id="record-title">
+            CAMPAIGN IS NOT AVAILABLE, TRY UPLOAD SOME DATA
+        </h1>
+        <% } %>
+    </div>
+    <%- include('partials/footer') %>
+
+    <script src='/js/environment.js'></script>
+    <script src='/js/format-table.js'></script>
+</body>
+
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <link rel='stylesheet' href='/css/navigation.css'>
+    <link rel='stylesheet' href='/css/upload.css'>
+    <title>Trackmania</title>
+</head>
+
+<body>
+    <%- include('partials/header')%>
+
+    <section>
+        <div id='hero-image-container'>
+            <img id='hero-image' src='resources/tm_banner.png'>
+            <div id='drop-container'>
+                <div id='drop-area'>
+                    <div id='instruction-container'>
+                        <div id='area-empty'>
+                            <header id='header-text-empty'>Drop GBX files here</header>
+                            <span id='span-empty'>OR</span>
+                            <button class='custom-button' id='button-empty'>BROWSE</button>
+                            <input id='input-empty' type='file' multiple='multiple'>
+                        </div>
+
+                        <div id='area-filled'>
+                            <header id='header-text-filled'></header>
+                            <span id='span-filled'></span>
+                            <div id='button-section-filled'>
+                                <button class='custom-button' id='button-filled-upload'>UPLOAD</button>
+                                <button class='custom-button' id='button-filled-cancel'>CANCEL</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <%- include('partials/footer')%>
+
+    <script src='/js/environment.js'></script>
+    <script src='/js/upload.js'></script>
+    <script src='/js/gbx-parser.js'></script>
+</body>
+
+</html>

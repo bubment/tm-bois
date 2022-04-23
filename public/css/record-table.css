@@ -1,0 +1,98 @@
+#record-container {
+    background: linear-gradient(180deg, rgba(24, 29, 58, 1) 0%, rgba(71, 255, 188, 1) 100%);
+    overflow: hidden;
+    min-height: 60em;
+}
+
+#record-title {
+    font-size: 1.6em;
+    color: var(--base-color-white);
+    font-weight: 600;
+    text-align: center;
+    padding: 2em 0;
+    letter-spacing: 1px;
+    line-height: 1.3em;
+    border-spacing: 3em;
+}
+
+#record-table {
+    margin: auto;
+    padding: 0 1em 5em 1em;
+    color: var(--base-color-white);
+    font-size: 1.1em;
+    font-weight: 600;
+    font-style: italic;
+    text-align: center;
+    border-radius: 10px;
+    border-spacing: 0;
+}
+
+#table-header td:first-child {
+    border-top-left-radius: 10px;
+}
+
+#table-header td:last-child {
+    border-top-right-radius: 10px;
+}
+
+#table-body tr:last-child td:first-child {
+    border-bottom-left-radius: 10px;
+}
+
+#table-body tr:last-child td:last-child {
+    border-bottom-right-radius: 10px;
+}
+
+.table-header-data {
+    width: 250px;
+    padding: 0.4em 0;
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.table-header-data:first-child {
+    width: 75px;
+}
+
+.table-body-data {
+    width: 250px;
+    padding: 0.3em 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    font-variant-numeric: tabular-nums;
+}
+
+.table-body-data:first-child {
+    width: 75px;
+}
+
+#time-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.best-time {
+    color: #FFD700
+}
+
+.delta-content {
+    color: red;
+    font-size: 0.5em;
+    padding-top: 0.4em;
+}
+
+.delta-null {
+    color: green;
+}
+
+.hidden {
+    color: transparent;
+}
+
+@media (min-width: 900px) {
+    #record-title {
+        font-size: 3em;
+    }
+
+    #record-table {
+        font-size: 1.6em;
+    }
+}
