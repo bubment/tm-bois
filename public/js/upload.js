@@ -36,7 +36,7 @@ uploadButton.addEventListener('click', () => {
         body: JSON.stringify(requestBody)
     };
 
-    fetch(`${HOST}/upload`, requestOptions)
+    fetch(`${HOST}/api/replays/upload`, requestOptions)
         .then(response => response.json())
         .then(data => console.log(data))
         .catch(error => console.log(error));
